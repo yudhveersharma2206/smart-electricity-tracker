@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import api from '../api';
-import { Appliance } from '../types';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell } from 'recharts';
 import { Zap, DollarSign, Activity, Sparkles, Download, TrendingUp } from 'lucide-react';
 import jsPDF from 'jspdf';
@@ -9,8 +8,8 @@ import toast from 'react-hot-toast';
 import { motion } from 'motion/react';
 
 const Dashboard = () => {
-  const [appliances, setAppliances] = useState<Appliance[]>([]);
-  const [aiSuggestions, setAiSuggestions] = useState<string>('');
+  const [appliances, setAppliances] = useState([]);
+  const [aiSuggestions, setAiSuggestions] = useState('');
   const [isAnalyzing, setIsAnalyzing] = useState(false);
 
   useEffect(() => {
@@ -70,7 +69,6 @@ const Dashboard = () => {
   };
 
   const exportPDF = () => {
-    // @ts-ignore
     const doc = new jsPDF();
     doc.setFontSize(22);
     doc.text('Electricity Usage Report', 20, 20);
@@ -84,7 +82,6 @@ const Dashboard = () => {
       `${(a.powerWatts * a.usageHours / 1000).toFixed(2)} kWh`
     ]);
 
-    // @ts-ignore
     doc.autoTable({
       head: [['Appliance', 'Power', 'Daily Usage', 'Daily Consumption']],
       body: tableData,
@@ -93,7 +90,7 @@ const Dashboard = () => {
       headStyles: { fillColor: [59, 130, 246] }
     });
 
-    const finalY = (doc as any).lastAutoTable.finalY + 10;
+    const finalY = doc.lastAutoTable.finalY + 10;
     doc.text(`Total Daily Consumption: ${stats.dailyKwh} kWh`, 20, finalY);
     doc.text(`Estimated Monthly Bill: $${stats.estimatedBill}`, 20, finalY + 10);
 
@@ -234,7 +231,7 @@ const Dashboard = () => {
   );
 };
 
-const StatCard = ({ icon, label, value, color }: { icon: any, label: string, value: string, color: string }) => (
+const StatCard = ({ icon, label, value, color }) => (
   <motion.div 
     whileHover={{ y: -4 }}
     className="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm flex items-center gap-4"

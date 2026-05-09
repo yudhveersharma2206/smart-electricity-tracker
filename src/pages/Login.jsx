@@ -13,7 +13,7 @@ const Login = () => {
   const { login } = useAuth();
   const navigate = useNavigate();
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     try {
@@ -21,7 +21,7 @@ const Login = () => {
       login(res.data.token, res.data.user);
       toast.success('Welcome back!');
       navigate('/');
-    } catch (err: any) {
+    } catch (err) {
       toast.error(err.response?.data?.error || 'Login failed');
     } finally {
       setLoading(false);

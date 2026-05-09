@@ -17,13 +17,13 @@ async function startServer() {
   app.use(express.json());
 
   // --- Auth Middleware ---
-  const authenticateToken = (req: any, res: any, next: any) => {
+  const authenticateToken = (req, res, next) => {
     const authHeader = req.headers['authorization'];
     const token = authHeader && authHeader.split(' ')[1];
 
     if (!token) return res.sendStatus(401);
 
-    jwt.verify(token, JWT_SECRET, (err: any, user: any) => {
+    jwt.verify(token, JWT_SECRET, (err, user) => {
       if (err) return res.sendStatus(403);
       req.user = user;
       next();
@@ -44,7 +44,7 @@ async function startServer() {
 
   app.post('/api/auth/login', async (req, res) => {
     const { email, password } = req.body;
-    const user: any = await get('SELECT * FROM users WHERE email = ?', [email]);
+    const user = await get('SELECT * FROM users WHERE email = ?', [email]);
     if (!user || !(await bcrypt.compare(password, user.password))) {
       return res.status(401).json({ error: 'Invalid credentials' });
     }
@@ -53,13 +53,13 @@ async function startServer() {
   });
 
   // --- Appliance Routes ---
-  app.get('/api/appliances', authenticateToken, async (req: any, res) => {
+  app.get('/api/appliances', authenticateToken, async (req, res) => {
     const userId = req.user.id;
     const appliances = await all('SELECT * FROM appliances WHERE userId = ?', [userId]);
     res.json(appliances);
   });
 
-  app.post('/api/appliances', authenticateToken, async (req: any, res) => {
+  app.post('/api/appliances', authenticateToken, async (req, res) => {
     const { name, powerWatts, usageHours } = req.body;
     const userId = req.user.id;
     await run('INSERT INTO appliances (userId, name, powerWatts, usageHours) VALUES (?, ?, ?, ?)', 
@@ -67,7 +67,7 @@ async function startServer() {
     res.sendStatus(201);
   });
 
-  app.delete('/api/appliances/:id', authenticateToken, async (req: any, res) => {
+  app.delete('/api/appliances/:id', authenticateToken, async (req, res) => {
     const { id } = req.params;
     const userId = req.user.id;
     await run('DELETE FROM appliances WHERE id = ? AND userId = ?', [id, userId]);
@@ -75,7 +75,7 @@ async function startServer() {
   });
 
   // --- AI Route ---
-  app.post('/api/ai/suggestions', authenticateToken, async (req: any, res) => {
+  app.post('/api/ai/suggestions', authenticateToken, async (req, res) => {
     try {
       const { appliances } = req.body;
       const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
@@ -84,7 +84,7 @@ async function startServer() {
         return res.status(500).json({ error: 'Gemini API Key not configured' });
       }
 
-      const applianceData = appliances.map((a: any) => `${a.name}: ${a.powerWatts}W used for ${a.usageHours}h/day`).join(', ');
+      const applianceData = appliances.map((a) => `${a.name}: ${a.powerWatts}W used for ${a.usageHours}h/day`).join(', ');
       const prompt = `Based on these household appliances: ${applianceData}. Provide 3 concise and actionable tips to reduce electricity consumption and lower the monthly bill. Return only the tips as a markdown list.`;
 
       const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_API_KEY}`, {
@@ -105,13 +105,13 @@ async function startServer() {
   });
 
   // --- History Routes ---
-  app.get('/api/history', authenticateToken, async (req: any, res) => {
+  app.get('/api/history', authenticateToken, async (req, res) => {
     const userId = req.user.id;
     const history = await all('SELECT * FROM electricity_records WHERE userId = ? ORDER BY id DESC', [userId]);
     res.json(history);
   });
 
-  app.post('/api/history', authenticateToken, async (req: any, res) => {
+  app.post('/api/history', authenticateToken, async (req, res) => {
     const userId = req.user.id;
     const { month, totalKwh, estimatedCost } = req.body;
     await run('INSERT INTO electricity_records (userId, month, totalKwh, estimatedCost) VALUES (?, ?, ?, ?)',

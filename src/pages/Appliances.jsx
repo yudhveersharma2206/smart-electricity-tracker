@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import api from '../api';
-import { Appliance } from '../types';
 import toast from 'react-hot-toast';
 import { Trash2, Plus, Zap, Clock } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 
 const Appliances = () => {
-  const [appliances, setAppliances] = useState<Appliance[]>([]);
+  const [appliances, setAppliances] = useState([]);
   const [loading, setLoading] = useState(true);
   const [name, setName] = useState('');
   const [powerWatts, setPowerWatts] = useState('');
@@ -32,7 +31,7 @@ const Appliances = () => {
     app.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  const handleAdd = async (e: React.FormEvent) => {
+  const handleAdd = async (e) => {
     e.preventDefault();
     try {
       await api.post('/appliances', {
@@ -50,7 +49,7 @@ const Appliances = () => {
     }
   };
 
-  const handleDelete = async (id: number) => {
+  const handleDelete = async (id) => {
     try {
       await api.delete(`/appliances/${id}`);
       toast.success('Appliance removed');

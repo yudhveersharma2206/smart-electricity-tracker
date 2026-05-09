@@ -11,14 +11,14 @@ const Register = () => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     try {
       await api.post('/auth/register', { email, password });
       toast.success('Registration successful! Please login.');
       navigate('/login');
-    } catch (err: any) {
+    } catch (err) {
       toast.error(err.response?.data?.error || 'Registration failed');
     } finally {
       setLoading(false);

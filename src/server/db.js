@@ -38,15 +38,15 @@ export async function initDB() {
   console.log('Database initialized');
 }
 
-export const run = (sql: string, params: any[] = []) => {
+export const run = (sql, params = []) => {
   return db.prepare(sql).run(...params);
 };
 
-export const get = (sql: string, params: any[] = []) => {
+export const get = (sql, params = []) => {
   return db.prepare(sql).get(...params);
 };
 
-export const all = (sql: string, params: any[] = []) => {
+export const all = (sql, params = []) => {
   return db.prepare(sql).all(...params);
 };
 
