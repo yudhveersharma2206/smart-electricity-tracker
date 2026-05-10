@@ -1,20 +1,50 @@
-<div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
-</div>
+# Smart Electricity Usage Tracker
 
-# Run and deploy your AI Studio app
+This repository has been reorganized into a clean full-stack JavaScript architecture.
 
-This contains everything you need to run your app locally.
+## Structure
 
-View your app in AI Studio: https://ai.studio/apps/c5ae22f8-9f8a-4ddd-a002-d20c0fb64282
+- `backend/` — Node.js + Express API server
+- `frontend/` — Vite-powered React application
+- `README.md` — setup and run instructions
 
-## Run Locally
+## Setup
 
-**Prerequisites:**  Node.js
+Install dependencies separately for each package:
 
+```bash
+cd backend
+npm install
+cd ../frontend
+npm install
+```
 
-1. Install dependencies:
-   `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
-   `npm run dev`
+## Run locally
+
+Start the backend API server:
+
+```bash
+cd backend
+npm start
+```
+
+Start the frontend development app:
+
+```bash
+cd frontend
+npm run dev
+```
+
+## Backend environment
+
+Copy or edit `backend/.env` and provide values for:
+
+- `JWT_SECRET`
+- `GEMINI_API_KEY` (optional for AI suggestions)
+
+The backend listens on port `3000` by default.
+
+## Notes
+
+- The frontend proxies `/api` requests to the backend in development.
+- No TypeScript is used in this project.

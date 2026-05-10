@@ -5,7 +5,7 @@ import { Zap, DollarSign, Activity, Sparkles, Download, TrendingUp } from 'lucid
 import jsPDF from 'jspdf';
 import 'jspdf-autotable';
 import toast from 'react-hot-toast';
-import { motion } from 'motion/react';
+import { motion } from 'framer-motion';
 
 const Dashboard = () => {
   const [appliances, setAppliances] = useState([]);

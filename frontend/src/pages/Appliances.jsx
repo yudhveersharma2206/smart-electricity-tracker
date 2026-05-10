@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import api from '../api';
 import toast from 'react-hot-toast';
 import { Trash2, Plus, Zap, Clock } from 'lucide-react';
-import { motion, AnimatePresence } from 'motion/react';
+import { motion, AnimatePresence } from 'framer-motion';
 
 const Appliances = () => {
   const [appliances, setAppliances] = useState([]);
